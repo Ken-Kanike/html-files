@@ -1,6 +1,7 @@
 /**
- * Coca-Cola Interactive Experience - Script Engine
- * High-performance scroll physics, interactive UI modules, and ambient audio
+ * Coca-Cola Interactive Experience - Master Production Engine
+ * High-performance section-driven 3D bottle choreography, Canvas fizz particles,
+ * Share-A-Coke Studio, 3D card tilts, and Web Audio API FX.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -9,14 +10,18 @@ document.addEventListener('DOMContentLoaded', () => {
     initAccordions();
     initFlavorSwitcher();
     initChillSlider();
+    initShareACokeStudio();
+    initFranchiseCalculator();
+    init3DCardTilt();
+    initScrollReveal();
     initModalsAndDrawers();
     initAudioEngine();
-    initCounters();
+    initImpactCounters();
     initToastNotifications();
 });
 
 /* ===================================================
-   1. BOTTLE SCROLL PHYSICS & TIMELINE
+   1. SECTION-RELATIVE PRECISION BOTTLE PHYSICS
    =================================================== */
 function initScrollPhysics() {
     const bottleContainer = document.getElementById('coke-bottle-stage');
@@ -28,112 +33,115 @@ function initScrollPhysics() {
     let targetY = 0;
     let targetRotate = 0;
     let targetScale = 1;
+    let targetOpacity = 1;
+
     let currentX = 0;
     let currentY = 0;
     let currentRotate = 0;
     let currentScale = 1;
+    let currentOpacity = 1;
 
-    function onScroll() {
-        const scrollY = window.scrollY || window.pageYOffset;
-        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = Math.min(Math.max(scrollY / (maxScroll || 1), 0), 1);
+    const sections = [
+        { id: 'hero', getTarget: (p) => ({ x: 0, y: p * 30, rotate: p * -6, scale: 1 - p * 0.05, opacity: 1 }) },
+        { id: 'craft-section', getTarget: (p) => ({ x: -window.innerWidth * 0.25, y: 0, rotate: 10 - p * 4, scale: 1.05, opacity: 1 }) },
+        { id: 'flavors-section', getTarget: (p) => ({ x: window.innerWidth * 0.25, y: 0, rotate: -8 + p * 4, scale: 1.05, opacity: 1 }) },
+        { id: 'chill-section', getTarget: (p) => ({ x: -window.innerWidth * 0.25, y: 0, rotate: 8, scale: 1.05, opacity: 1 }) },
+        { id: 'studio-section', getTarget: (p) => ({ x: window.innerWidth * 0.25, y: 0, rotate: -6, scale: 1.05, opacity: 1 }) },
+        { id: 'franchise-section', getTarget: (p) => ({ x: -window.innerWidth * 0.25, y: 0, rotate: 6, scale: 1.05, opacity: 1 }) },
+        { id: 'impact-section', getTarget: (p) => ({ x: 0, y: 0, rotate: 0, scale: 0.65, opacity: 0.22 }) },
+        { id: 'cta-section', getTarget: (p) => ({ x: 0, y: 40, rotate: 0, scale: 0.85, opacity: 0.5 }) }
+    ];
 
-        // Sections reference points
-        const heroSection = document.getElementById('hero');
-        const craftSection = document.getElementById('craft-section');
-        const flavorSection = document.getElementById('flavors-section');
-        const chillSection = document.getElementById('chill-section');
-        const impactSection = document.getElementById('impact-section');
-        const ctaSection = document.getElementById('cta-section');
-
+    function calculateTargetPhysics() {
         const winHeight = window.innerHeight;
-        const isMobile = window.innerWidth <= 768;
+        const isMobile = window.innerWidth <= 1024;
 
         if (isMobile) {
-            // Subdued motion for mobile
             targetX = 0;
-            targetY = Math.sin(Date.now() * 0.002) * 5;
-            targetRotate = Math.sin(Date.now() * 0.001) * 3;
-            targetScale = 0.85;
+            targetY = Math.sin(Date.now() * 0.002) * 6;
+            targetRotate = Math.sin(Date.now() * 0.001) * 2;
+            targetScale = 0.8;
+            targetOpacity = 0.35;
             return;
         }
 
-        // Multistage Scroll Choreography
-        if (progress < 0.18) {
-            // STAGE 0: HERO (Centered in glowing arch)
-            const p0 = progress / 0.18;
-            targetX = 0;
-            targetY = p0 * 40;
-            targetRotate = (p0 * -6);
-            targetScale = 1 + (p0 * 0.08);
-            if (heroBgArch) {
-                heroBgArch.style.transform = `scale(${1 - p0 * 0.15}) translateY(${p0 * 30}px)`;
-                heroBgArch.style.opacity = `${1 - p0 * 0.8}`;
+        // Determine active section via bounding client rects
+        let activeFound = false;
+
+        for (let i = 0; i < sections.length; i++) {
+            const secElem = document.getElementById(sections[i].id);
+            if (!secElem) continue;
+
+            const rect = secElem.getBoundingClientRect();
+            // Check if section is centered in the viewport
+            if (rect.top <= winHeight * 0.6 && rect.bottom >= winHeight * 0.4) {
+                const sectionProgress = Math.min(Math.max((winHeight * 0.5 - rect.top) / rect.height, 0), 1);
+                const targetState = sections[i].getTarget(sectionProgress);
+                
+                targetX = targetState.x;
+                targetY = targetState.y;
+                targetRotate = targetState.rotate;
+                targetScale = targetState.scale;
+                targetOpacity = targetState.opacity;
+                activeFound = true;
+                break;
             }
-        } else if (progress < 0.40) {
-            // STAGE 1: THE SECRET FORMULA & CRAFT (Moves to left side, tilts 8deg, specs on right)
-            const p1 = (progress - 0.18) / 0.22;
-            targetX = -260 + (p1 * -30);
-            targetY = 20 + (p1 * 30);
-            targetRotate = -6 + (p1 * 14); // tilts to +8deg
-            targetScale = 1.08 + (p1 * 0.07);
-        } else if (progress < 0.65) {
-            // STAGE 2: FLAVORS SHOWCASE (Glides to right, tilts back, scale up)
-            const p2 = (progress - 0.40) / 0.25;
-            targetX = -290 + (p2 * 540); // moves to +250px right
-            targetY = 50 - (p2 * 20);
-            targetRotate = 8 - (p2 * 18); // tilts to -10deg
-            targetScale = 1.15 - (p2 * 0.1);
-        } else if (progress < 0.85) {
-            // STAGE 3: OPTIMAL CHILL (Moves back towards center-left, frosty chill vibe)
-            const p3 = (progress - 0.65) / 0.20;
-            targetX = 250 - (p3 * 400); // moves to -150px
-            targetY = 30 + (p3 * 20);
-            targetRotate = -10 + (p3 * 16);
-            targetScale = 1.05 + (p3 * 0.05);
-        } else {
-            // STAGE 4: SUSTAINABILITY & FINAL CTA (Centers and scales nicely)
-            const p4 = (progress - 0.85) / 0.15;
-            targetX = -150 + (p4 * 150);
-            targetY = 50 + (p4 * 20);
-            targetRotate = 6 - (p4 * 6);
-            targetScale = 1.1 - (p4 * 0.15);
+        }
+
+        if (!activeFound) {
+            // Default fallback
+            targetX = 0;
+            targetY = 0;
+            targetRotate = 0;
+            targetScale = 1;
+            targetOpacity = 1;
+        }
+
+        // Hero arch scaling
+        if (heroBgArch) {
+            const heroRect = document.getElementById('hero')?.getBoundingClientRect();
+            if (heroRect) {
+                const p = Math.max(0, -heroRect.top / heroRect.height);
+                heroBgArch.style.transform = `scale(${Math.max(0.85, 1 - p * 0.2)}) translateY(${p * 40}px)`;
+                heroBgArch.style.opacity = `${Math.max(0, 1 - p * 1.2)}`;
+            }
         }
     }
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
-    onScroll();
+    window.addEventListener('scroll', calculateTargetPhysics, { passive: true });
+    window.addEventListener('resize', calculateTargetPhysics);
+    calculateTargetPhysics();
 
-    // Smooth Lerp Animation Loop
+    // Smooth Lerp Animation Loop (60 FPS)
     function renderLoop() {
-        // Idle gentle float physics
-        const time = Date.now() * 0.0025;
-        const idleBob = Math.sin(time) * 8;
-        const idleTilt = Math.cos(time * 0.8) * 1.5;
+        // Continuous subtle floating levitation
+        const idleFloat = Math.sin(Date.now() * 0.002) * 7;
+        const idleRot = Math.cos(Date.now() * 0.0015) * 1.5;
 
-        currentX += (targetX - currentX) * 0.09;
-        currentY += (targetY - currentY) * 0.09;
-        currentRotate += (targetRotate + idleTilt - currentRotate) * 0.09;
-        currentScale += (targetScale - currentScale) * 0.09;
+        currentX += (targetX - currentX) * 0.08;
+        currentY += ((targetY + idleFloat) - currentY) * 0.08;
+        currentRotate += ((targetRotate + idleRot) - currentRotate) * 0.08;
+        currentScale += (targetScale - currentScale) * 0.08;
+        currentOpacity += (targetOpacity - currentOpacity) * 0.08;
 
-        bottleContainer.style.transform = `translate(calc(-50% + ${currentX}px), calc(-50% + ${currentY + idleBob}px)) rotate(${currentRotate}deg) scale(${currentScale})`;
+        bottleContainer.style.transform = `translate(calc(-50% + ${currentX}px), calc(-50% + ${currentY}px)) rotate(${currentRotate}deg) scale(${currentScale})`;
+        bottleContainer.style.opacity = currentOpacity;
 
         requestAnimationFrame(renderLoop);
     }
-    requestAnimationFrame(renderLoop);
+    renderLoop();
 }
 
 /* ===================================================
-   2. FIZZING BUBBLE CANVAS PARTICLES
+   2. CANVAS PARTICLES (Effervescence & Ice)
    =================================================== */
 function initCanvasParticles() {
     const canvas = document.getElementById('fizz-canvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
 
     window.addEventListener('resize', () => {
         width = canvas.width = window.innerWidth;
@@ -141,27 +149,27 @@ function initCanvasParticles() {
     });
 
     const bubbles = [];
-    const bubbleCount = 45;
+    const bubbleCount = Math.min(Math.floor(window.innerWidth / 22), 65);
 
     for (let i = 0; i < bubbleCount; i++) {
         bubbles.push({
             x: Math.random() * width,
             y: Math.random() * height,
-            radius: Math.random() * 3 + 1,
-            speed: Math.random() * 1.2 + 0.4,
-            opacity: Math.random() * 0.6 + 0.15,
-            wobble: Math.random() * Math.PI * 2,
-            wobbleSpeed: Math.random() * 0.04 + 0.01
+            radius: Math.random() * 2.8 + 1,
+            speedY: Math.random() * 1.4 + 0.6,
+            speedX: (Math.random() - 0.5) * 0.6,
+            opacity: Math.random() * 0.55 + 0.15,
+            wobble: Math.random() * Math.PI * 2
         });
     }
 
-    function animate() {
+    function animateParticles() {
         ctx.clearRect(0, 0, width, height);
 
         for (let b of bubbles) {
-            b.y -= b.speed;
-            b.wobble += b.wobbleSpeed;
-            const wobbleX = b.x + Math.sin(b.wobble) * 12;
+            b.y -= b.speedY;
+            b.wobble += 0.03;
+            b.x += Math.sin(b.wobble) * 0.5 + b.speedX;
 
             if (b.y < -10) {
                 b.y = height + 10;
@@ -169,381 +177,414 @@ function initCanvasParticles() {
             }
 
             ctx.beginPath();
-            ctx.arc(wobbleX, b.y, b.radius, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 60, 60, ${b.opacity})`;
-            ctx.shadowColor = 'rgba(255, 30, 30, 0.8)';
+            ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 60, 70, ${b.opacity})`;
+            ctx.shadowColor = 'rgba(255, 30, 39, 0.6)';
             ctx.shadowBlur = 6;
             ctx.fill();
         }
 
-        requestAnimationFrame(animate);
+        requestAnimationFrame(animateParticles);
     }
-    requestAnimationFrame(animate);
+    animateParticles();
 }
 
 /* ===================================================
-   3. ACCORDIONS & INTERACTIVE SPEC TABS
+   3. ACCORDIONS (Nutrition & Ingredients)
    =================================================== */
 function initAccordions() {
-    const accordionHeaders = document.querySelectorAll('.accordion-header');
-    accordionHeaders.forEach(header => {
+    const items = document.querySelectorAll('.accordion-item');
+    items.forEach(item => {
+        const header = item.querySelector('.accordion-header');
         header.addEventListener('click', () => {
-            const item = header.parentElement;
             const isActive = item.classList.contains('active');
-
-            // Close others in same group
-            const parentGroup = item.parentElement;
-            parentGroup.querySelectorAll('.accordion-item').forEach(other => {
-                other.classList.remove('active');
-                const icon = other.querySelector('.accordion-icon i');
-                if (icon) icon.className = 'ri-add-circle-line';
+            items.forEach(i => {
+                i.classList.remove('active');
+                const icon = i.querySelector('.accordion-icon i');
+                if (icon) {
+                    icon.classList.remove('ri-indeterminate-circle-line');
+                    icon.classList.add('ri-add-circle-line');
+                }
             });
 
             if (!isActive) {
                 item.classList.add('active');
-                const icon = header.querySelector('.accordion-icon i');
-                if (icon) icon.className = 'ri-indeterminate-circle-line';
+                const icon = item.querySelector('.accordion-icon i');
+                if (icon) {
+                    icon.classList.remove('ri-add-circle-line');
+                    icon.classList.add('ri-indeterminate-circle-line');
+                }
             }
         });
     });
 }
 
 /* ===================================================
-   4. FLAVOR CUSTOMIZER & EDITIONS SWITCHER
+   4. FLAVOR SPECTRUM SWITCHER
    =================================================== */
-const flavorData = {
-    original: {
-        name: 'Original Taste',
-        subtitle: 'The timeless classic since 1886 with crisp effervescence and secret botanical notes.',
-        tag: 'Iconic Classic',
-        calories: '140 kcal',
-        sugar: '39g',
-        caffeine: '34mg',
-        color: '#ff1e27',
-        bgGlow: 'radial-gradient(circle at 65% 50%, rgba(229, 9, 20, 0.45) 0%, transparent 60%)'
-    },
-    zero: {
-        name: 'Zero Sugar',
-        subtitle: 'Uncompromising classic Coke flavor crafted with zero sugar and zero calories.',
-        tag: 'Zero Calories',
-        calories: '0 kcal',
-        sugar: '0g',
-        caffeine: '34mg',
-        color: '#111111',
-        bgGlow: 'radial-gradient(circle at 65% 50%, rgba(120, 120, 120, 0.35) 0%, transparent 60%)'
-    },
-    cherry: {
-        name: 'Cherry Splash',
-        subtitle: 'A sweet burst of rich dark cherry fruit aroma blended into the original crisp formula.',
-        tag: 'Fruit Fusion',
-        calories: '150 kcal',
-        sugar: '42g',
-        caffeine: '34mg',
-        color: '#c2185b',
-        bgGlow: 'radial-gradient(circle at 65% 50%, rgba(194, 24, 91, 0.45) 0%, transparent 60%)'
-    },
-    vanilla: {
-        name: 'Vanilla Dream',
-        subtitle: 'Velvety smooth Madagascar vanilla notes combined with legendary cola zest.',
-        tag: 'Silky Smooth',
-        calories: '150 kcal',
-        sugar: '42g',
-        caffeine: '34mg',
-        color: '#e0a96d',
-        bgGlow: 'radial-gradient(circle at 65% 50%, rgba(224, 169, 109, 0.4) 0%, transparent 60%)'
-    }
-};
-
 function initFlavorSwitcher() {
-    const flavorPills = document.querySelectorAll('.flavor-pill');
-    const flavorCard = document.getElementById('active-flavor-details');
-    const flavorSection = document.getElementById('flavors-section');
+    const pills = document.querySelectorAll('.flavor-pill');
+    const badge = document.getElementById('flavor-badge');
+    const title = document.getElementById('flavor-title');
+    const subtitle = document.getElementById('flavor-subtitle');
+    const cals = document.getElementById('flavor-cals');
+    const sugars = document.getElementById('flavor-sugars');
+    const caffeine = document.getElementById('flavor-caffeine');
+    const card = document.getElementById('active-flavor-details');
 
-    if (!flavorPills.length || !flavorCard) return;
+    const flavorData = {
+        original: {
+            badge: 'Iconic Classic',
+            title: 'Original Taste',
+            subtitle: 'The timeless classic since 1886 with crisp effervescence and secret botanical notes.',
+            cals: '140 kcal',
+            sugars: '39g',
+            caffeine: '34mg',
+            auraColor: 'rgba(255, 30, 39, 0.35)'
+        },
+        zero: {
+            badge: 'Zero Calorie',
+            title: 'Zero Sugar',
+            subtitle: 'Iconic authentic Coca-Cola taste with zero calories and zero sugar.',
+            cals: '0 kcal',
+            sugars: '0g',
+            caffeine: '34mg',
+            auraColor: 'rgba(70, 70, 70, 0.45)'
+        },
+        cherry: {
+            badge: 'Fruit Infusion',
+            title: 'Cherry Splash',
+            subtitle: 'Bursting with sweet and tangy natural black cherry extracts for an exhilarating twist.',
+            cals: '150 kcal',
+            sugars: '42g',
+            caffeine: '34mg',
+            auraColor: 'rgba(194, 24, 91, 0.4)'
+        },
+        vanilla: {
+            badge: 'Smooth Blend',
+            title: 'Vanilla Dream',
+            subtitle: 'Silky smooth Madagascar vanilla bean infusion blended with crisp carbonated cola.',
+            cals: '150 kcal',
+            sugars: '42g',
+            caffeine: '34mg',
+            auraColor: 'rgba(224, 169, 109, 0.4)'
+        }
+    };
 
-    flavorPills.forEach(pill => {
+    pills.forEach(pill => {
         pill.addEventListener('click', () => {
-            flavorPills.forEach(p => p.classList.remove('active'));
+            pills.forEach(p => p.classList.remove('active'));
             pill.classList.add('active');
 
-            const flavorKey = pill.getAttribute('data-flavor');
-            const data = flavorData[flavorKey] || flavorData.original;
+            const key = pill.dataset.flavor;
+            const data = flavorData[key];
+            if (!data) return;
 
-            // Update details with micro-animation
-            flavorCard.classList.add('fading');
-            setTimeout(() => {
-                document.getElementById('flavor-title').textContent = data.name;
-                document.getElementById('flavor-subtitle').textContent = data.subtitle;
-                document.getElementById('flavor-badge').textContent = data.tag;
-                document.getElementById('flavor-cals').textContent = data.calories;
-                document.getElementById('flavor-sugars').textContent = data.sugar;
-                document.getElementById('flavor-caffeine').textContent = data.caffeine;
+            // Trigger Pop Audio
+            playPopSound();
 
-                if (flavorSection) {
-                    flavorSection.style.background = data.bgGlow;
-                }
-                flavorCard.classList.remove('fading');
-            }, 180);
-
-            showToast(`Selected flavor: ${data.name}`);
+            if (card) {
+                card.classList.add('fading');
+                setTimeout(() => {
+                    badge.textContent = data.badge;
+                    title.textContent = data.title;
+                    subtitle.textContent = data.subtitle;
+                    cals.textContent = data.cals;
+                    sugars.textContent = data.sugars;
+                    caffeine.textContent = data.caffeine;
+                    card.classList.remove('fading');
+                }, 180);
+            }
         });
     });
 }
 
 /* ===================================================
-   5. CHILL SLIDER & TEMPERATURE GAUGE
+   5. SUB-ZERO CHILL SLIDER
    =================================================== */
 function initChillSlider() {
     const slider = document.getElementById('temp-slider');
-    const tempValue = document.getElementById('temp-value-display');
-    const tempStatus = document.getElementById('temp-status-text');
-    const chillMeterBar = document.getElementById('chill-meter-fill');
+    const valDisplay = document.getElementById('temp-value-display');
+    const meterFill = document.getElementById('chill-meter-fill');
+    const statusText = document.getElementById('temp-status-text');
+    const bottleImg = document.getElementById('main-coke-bottle');
 
-    if (!slider || !tempValue || !tempStatus) return;
+    if (!slider || !valDisplay) return;
 
     slider.addEventListener('input', (e) => {
-        const val = parseInt(e.target.value);
-        tempValue.textContent = `${val}°C`;
+        const temp = parseInt(e.target.value);
+        valDisplay.textContent = `${temp}°C`;
 
-        const percent = ((val - 1) / (12 - 1)) * 100;
-        if (chillMeterBar) chillMeterBar.style.width = `${percent}%`;
+        const percent = ((temp - 1) / 11) * 100;
+        if (meterFill) meterFill.style.width = `${percent}%`;
 
-        if (val <= 3) {
-            tempStatus.textContent = "❄️ Sub-Zero Ultra Crisp (Maximum Fizz & Zing)";
-            tempStatus.style.color = "#64b5f6";
-        } else if (val <= 5) {
-            tempStatus.textContent = "✨ The Gold Standard (Optimal Secret Formula Balance)";
-            tempStatus.style.color = "#81c784";
-        } else if (val <= 8) {
-            tempStatus.textContent = "🍃 Smooth & Sweet (Mellow Carbonation)";
-            tempStatus.style.color = "#ffb74d";
+        // Dynamic status feedback
+        if (temp <= 2) {
+            statusText.textContent = '❄️ Sub-Zero Frosted: Intense ice crystal carbonation crispness.';
+            statusText.style.color = '#80d8ff';
+            if (bottleImg) bottleImg.style.filter = 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 35px rgba(100, 181, 246, 0.8)) brightness(1.15)';
+        } else if (temp <= 5) {
+            statusText.textContent = '✨ The Gold Standard: Optimal secret formula sensory balance.';
+            statusText.style.color = '#90caf9';
+            if (bottleImg) bottleImg.style.filter = 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 25px rgba(255, 30, 39, 0.6))';
         } else {
-            tempStatus.textContent = "⚠️ Mild Warmth (Recommended: Add Ice Cubes!)";
-            tempStatus.style.color = "#e57373";
+            statusText.textContent = '☀️ Refreshing Ambient: Rich aromatic vanilla & caramel notes.';
+            statusText.style.color = '#ffb74d';
+            if (bottleImg) bottleImg.style.filter = 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 20px rgba(255, 183, 77, 0.5))';
         }
     });
 }
 
 /* ===================================================
-   6. MODALS, SIDEBAR DRAWER & SEARCH
+   6. SHARE-A-COKE CUSTOMIZER STUDIO
    =================================================== */
-function initModalsAndDrawers() {
-    // Menu Drawer
-    const menuBtn = document.getElementById('menu-trigger');
-    const closeMenuBtn = document.getElementById('close-drawer');
-    const drawer = document.getElementById('mobile-drawer');
-    const drawerOverlay = document.getElementById('drawer-overlay');
+function initShareACokeStudio() {
+    const input = document.getElementById('custom-label-input');
+    const labelDisplay = document.getElementById('live-custom-name');
+    const saveBtn = document.getElementById('generate-label-btn');
 
-    function openDrawer() {
-        drawer?.classList.add('open');
-        drawerOverlay?.classList.add('show');
-        document.body.style.overflow = 'hidden';
-    }
-    function closeDrawer() {
-        drawer?.classList.remove('open');
-        drawerOverlay?.classList.remove('show');
-        document.body.style.overflow = '';
-    }
+    if (!input || !labelDisplay) return;
 
-    menuBtn?.addEventListener('click', openDrawer);
-    closeMenuBtn?.addEventListener('click', closeDrawer);
-    drawerOverlay?.addEventListener('click', closeDrawer);
+    input.addEventListener('input', () => {
+        const text = input.value.trim();
+        labelDisplay.textContent = text.length > 0 ? text.toUpperCase() : 'YOUR NAME';
+    });
 
-    // Search Modal
-    const searchBtn = document.getElementById('search-trigger');
-    const searchModal = document.getElementById('search-modal');
-    const closeSearchBtn = document.getElementById('close-search');
-    const searchInput = document.getElementById('search-query-input');
-
-    function openSearch() {
-        searchModal?.classList.add('open');
-        setTimeout(() => searchInput?.focus(), 150);
-    }
-    function closeSearch() {
-        searchModal?.classList.remove('open');
-    }
-
-    searchBtn?.addEventListener('click', openSearch);
-    closeSearchBtn?.addEventListener('click', closeSearch);
-
-    // Taste Now Checkout Sheet
-    const tasteButtons = document.querySelectorAll('.taste-now-btn');
-    const orderModal = document.getElementById('order-modal');
-    const closeOrderBtn = document.getElementById('close-order');
-    const confirmOrderBtn = document.getElementById('confirm-order-btn');
-
-    tasteButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            orderModal?.classList.add('open');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+            const name = labelDisplay.textContent;
+            showToast(`🎉 Custom "${name}" Contour Can Saved to Bag!`);
+            playPopSound();
         });
-    });
+    }
+}
 
-    closeOrderBtn?.addEventListener('click', () => {
-        orderModal?.classList.remove('open');
-    });
+/* ===================================================
+   7. FRANCHISE ROI CALCULATOR
+   =================================================== */
+function initFranchiseCalculator() {
+    const slider = document.getElementById('calc-volume-slider');
+    const volDisplay = document.getElementById('calc-volume-display');
+    const revDisplay = document.getElementById('calc-revenue-display');
 
-    confirmOrderBtn?.addEventListener('click', () => {
-        orderModal?.classList.remove('open');
-        showToast('🎉 Coke pack added to your order! Delivering ice-cold freshness.');
-        updateCartBadge(1);
-    });
+    if (!slider || !volDisplay || !revDisplay) return;
 
-    // Favorite Heart Toggle
-    const heartBtns = document.querySelectorAll('.heart-toggle');
-    heartBtns.forEach(heart => {
-        let isFav = false;
-        heart.addEventListener('click', () => {
-            isFav = !isFav;
-            if (isFav) {
-                heart.classList.remove('ri-heart-line');
-                heart.classList.add('ri-heart-fill');
-                heart.style.color = '#ff1e27';
-                showToast('Added to your Favorites ❤️');
-            } else {
-                heart.classList.remove('ri-heart-fill');
-                heart.classList.add('ri-heart-line');
-                heart.style.color = '';
-                showToast('Removed from Favorites');
-            }
+    slider.addEventListener('input', () => {
+        const volume = parseInt(slider.value);
+        volDisplay.textContent = `${volume.toLocaleString()} cases/mo`;
+
+        // Standard wholesale distribution margin (~$14.50 gross profit per case)
+        const revenue = Math.round(volume * 14.5);
+        revDisplay.textContent = `$${revenue.toLocaleString()}`;
+    });
+}
+
+/* ===================================================
+   8. 3D CARD TILT ON MOUSE HOVER
+   =================================================== */
+function init3DCardTilt() {
+    const cards = document.querySelectorAll('.tilt-card');
+    cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = ((y - centerY) / centerY) * -7;
+            const rotateY = ((x - centerX) / centerX) * 7;
+
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';
         });
     });
 }
 
 /* ===================================================
-   7. WEB AUDIO API - FIZZ & CAN CRACK SOUND FX
+   9. SCROLL REVEAL UTILITY
+   =================================================== */
+function initScrollReveal() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+            }
+        });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal-item').forEach(el => observer.observe(el));
+}
+
+/* ===================================================
+   10. MODALS & DRAWERS
+   =================================================== */
+function initModalsAndDrawers() {
+    const searchModal = document.getElementById('search-modal');
+    const orderModal = document.getElementById('order-modal');
+    const drawerOverlay = document.getElementById('drawer-overlay');
+    const mobileDrawer = document.getElementById('mobile-drawer');
+
+    // Search Trigger
+    document.getElementById('search-trigger')?.addEventListener('click', () => {
+        searchModal?.classList.add('open');
+        document.getElementById('search-query-input')?.focus();
+    });
+    document.getElementById('close-search')?.addEventListener('click', () => searchModal?.classList.remove('open'));
+
+    // Taste Now / Order Triggers
+    document.querySelectorAll('.taste-now-btn').forEach(btn => {
+        btn.addEventListener('click', () => orderModal?.classList.add('open'));
+    });
+    document.getElementById('close-order')?.addEventListener('click', () => orderModal?.classList.remove('open'));
+
+    // Drawer Triggers
+    document.getElementById('menu-trigger')?.addEventListener('click', () => {
+        mobileDrawer?.classList.add('open');
+        drawerOverlay?.classList.add('show');
+    });
+    document.getElementById('close-drawer')?.addEventListener('click', closeDrawer);
+    drawerOverlay?.addEventListener('click', closeDrawer);
+
+    function closeDrawer() {
+        mobileDrawer?.classList.remove('open');
+        drawerOverlay?.classList.remove('show');
+    }
+
+    // Modal Size Selectors
+    document.querySelectorAll('.size-option').forEach(opt => {
+        opt.addEventListener('click', () => {
+            document.querySelectorAll('.size-option').forEach(o => o.classList.remove('selected'));
+            opt.classList.add('selected');
+        });
+    });
+
+    // Confirm Order
+    document.getElementById('confirm-order-btn')?.addEventListener('click', () => {
+        orderModal?.classList.remove('open');
+        const badge = document.getElementById('cart-count-badge');
+        if (badge) {
+            badge.style.display = 'flex';
+            badge.textContent = parseInt(badge.textContent || 0) + 1;
+        }
+        showToast('🛒 Ice-Cold Pack added to your bag!');
+        playPopSound();
+    });
+
+    // Close on backdrop click
+    [searchModal, orderModal].forEach(modal => {
+        modal?.addEventListener('click', (e) => {
+            if (e.target === modal) modal.classList.remove('open');
+        });
+    });
+}
+
+/* ===================================================
+   11. WEB AUDIO API SOUND ENGINE
    =================================================== */
 let audioCtx = null;
 let soundEnabled = false;
 
 function initAudioEngine() {
-    const audioToggle = document.getElementById('sound-toggle-btn');
-    if (!audioToggle) return;
+    const soundToggle = document.getElementById('sound-toggle-btn');
+    if (!soundToggle) return;
 
-    audioToggle.addEventListener('click', () => {
+    soundToggle.addEventListener('click', () => {
         if (!audioCtx) {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            audioCtx = new AudioContext();
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
         }
 
         soundEnabled = !soundEnabled;
+        soundToggle.classList.toggle('active', soundEnabled);
+        soundToggle.innerHTML = soundEnabled 
+            ? '<i class="ri-volume-up-line"></i> <span>Sound On</span>' 
+            : '<i class="ri-volume-mute-line"></i> <span>Sound</span>';
+
         if (soundEnabled) {
-            audioToggle.innerHTML = '<i class="ri-volume-vibrate-line"></i> <span>Sound On</span>';
-            audioToggle.classList.add('active');
-            playCanOpeningSound();
-            showToast('🔊 Effervescence sound fx enabled!');
-        } else {
-            audioToggle.innerHTML = '<i class="ri-volume-mute-line"></i> <span>Sound Muted</span>';
-            audioToggle.classList.remove('active');
-            showToast('🔇 Sound muted');
+            playPopSound();
+            showToast('🔊 Interactive Fizz Audio Enabled');
         }
     });
 }
 
-function playCanOpeningSound() {
-    if (!audioCtx || !soundEnabled) return;
+function playPopSound() {
+    if (!soundEnabled || !audioCtx) return;
     try {
-        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
 
-        // White noise for fizz
-        const bufferSize = audioCtx.sampleRate * 0.8;
-        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-        const output = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-            output[i] = Math.random() * 2 - 1;
-        }
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(450, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.12);
 
-        const whiteNoise = audioCtx.createBufferSource();
-        whiteNoise.buffer = buffer;
+        gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
 
-        // Filter for crisp hiss
-        const filter = audioCtx.createBiquadFilter();
-        filter.type = 'highpass';
-        filter.frequency.setValueAtTime(1500, now);
-        filter.frequency.exponentialRampToValueAtTime(6000, now + 0.6);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
 
-        const gainNode = audioCtx.createGain();
-        gainNode.gain.setValueAtTime(0.3, now);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.7);
-
-        whiteNoise.connect(filter);
-        filter.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-
-        whiteNoise.start(now);
-        whiteNoise.stop(now + 0.8);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.12);
     } catch (e) {
-        console.log('Audio playback info:', e);
+        console.warn('Audio play error:', e);
     }
 }
 
 /* ===================================================
-   8. STATS COUNTERS INTERSECTION OBSERVER
+   12. IMPACT COUNTERS (Scroll Triggered)
    =================================================== */
-function initCounters() {
-    const counters = document.querySelectorAll('.stat-number');
-    if (!counters.length) return;
-
-    let hasRun = false;
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && !hasRun) {
-                hasRun = true;
-                counters.forEach(counter => {
-                    const target = parseInt(counter.getAttribute('data-target') || '100');
-                    const suffix = counter.getAttribute('data-suffix') || '';
-                    let count = 0;
-                    const duration = 1600;
-                    const stepTime = 25;
-                    const steps = duration / stepTime;
-                    const increment = target / steps;
-
-                    const timer = setInterval(() => {
-                        count += increment;
-                        if (count >= target) {
-                            counter.textContent = `${target}${suffix}`;
-                            clearInterval(timer);
-                        } else {
-                            counter.textContent = `${Math.floor(count)}${suffix}`;
-                        }
-                    }, stepTime);
-                });
-            }
-        });
-    }, { threshold: 0.4 });
-
+function initImpactCounters() {
+    let triggered = false;
     const statsSection = document.getElementById('impact-section');
-    if (statsSection) observer.observe(statsSection);
+    if (!statsSection) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !triggered) {
+            triggered = true;
+            document.querySelectorAll('.stat-number').forEach(counter => {
+                const target = parseInt(counter.dataset.target);
+                const suffix = counter.dataset.suffix || '';
+                let count = 0;
+                const speed = 2000 / (target || 1);
+
+                const interval = setInterval(() => {
+                    count += Math.ceil(target / 45);
+                    if (count >= target) {
+                        counter.textContent = `${target}${suffix}`;
+                        clearInterval(interval);
+                    } else {
+                        counter.textContent = `${Math.floor(count)}${suffix}`;
+                    }
+                }, 35);
+            });
+        }
+    }, { threshold: 0.3 });
+
+    observer.observe(statsSection);
 }
 
 /* ===================================================
-   9. TOAST NOTIFICATION SYSTEM & CART BADGE
+   13. TOAST NOTIFICATIONS
    =================================================== */
-let toastTimeout;
-function showToast(message) {
+function initToastNotifications() {
     let toast = document.getElementById('coke-toast');
     if (!toast) {
         toast = document.createElement('div');
         toast.id = 'coke-toast';
         document.body.appendChild(toast);
     }
-    toast.textContent = message;
-    toast.classList.add('show');
-
-    clearTimeout(toastTimeout);
-    toastTimeout = setTimeout(() => {
-        toast.classList.remove('show');
-    }, 3200);
 }
 
-let cartCount = 0;
-function updateCartBadge(added) {
-    cartCount += added;
-    const badge = document.getElementById('cart-count-badge');
-    if (badge) {
-        badge.textContent = cartCount;
-        badge.style.display = 'inline-flex';
-        badge.classList.add('pop');
-        setTimeout(() => badge.classList.remove('pop'), 300);
-    }
+function showToast(msg) {
+    const toast = document.getElementById('coke-toast');
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3200);
 }
