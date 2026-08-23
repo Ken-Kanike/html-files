@@ -3,50 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Frontend Developer">
-    <meta name="description" content="Learning HTML.">
-    <link rel="icon" href="images/JStechnologieslogo.png" type="image/x-icon">
-    <link rel="stylesheet" href="part2main.css" type="text/css">
-    <title>Working with images</title>
+    <meta name="description" content="Mastering responsive images, figures, figcaptions, and modern image formats in HTML5.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masterclass Part 3: Working With Responsive Images</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --border: #334155;
+        }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        nav { display: flex; justify-content: space-between; margin-bottom: 30px; }
+        a { color: var(--accent); text-decoration: none; font-weight: bold; }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 25px;
+        }
+        .gallery-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .gallery-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+        .card-body {
+            padding: 16px;
+        }
+        figcaption {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 8px;
+            font-style: italic;
+        }
+    </style>
 </head>
 <body>
-    <!--br * 15 + tab-->
+    <div class="container">
+        <nav>
+            <a href="part2.html">← Part 2: Navigation & Anchors</a>
+            <span>HTML5 Masterclass: Part 3</span>
+            <a href="part4.html">Part 4: Semantic Layouts →</a>
+        </nav>
 
-    <h3>Beautiful places</h3>
-    <ul>
-        <li>
-            <p>
-                Beautiful snow mountains 
-            </p>
-            <img src="images/snow.jpeg" alt="image not available" title="Snowscape" width="474" height="266" loading="lazy"><!-- lazy loading =>  inspect => >>  => network => disable cache => image => refresh page -->
-        </li>
-        <li>
-            <p>
-                Marvolous city lights
-            </p>
-            <figure>
-                <img src="images/city.jpeg" alt="image not available" height="266" width="474" title="Citylights">
-                <figcaption>
-                    isnt it amazing ?
-                </figcaption>
+        <h1>Part 3: Working with Responsive Images & Figures</h1>
+        <p style="color: var(--text-muted);">Explore image optimization, lazy loading, and semantic figure wrappers.</p>
+
+        <div class="gallery-grid">
+            <figure class="gallery-card">
+                <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80" alt="Majestic snowy mountain peaks at sunrise" loading="lazy">
+                <div class="card-body">
+                    <h4>Alpine Snowscape</h4>
+                    <figcaption>High altitude mountain photography with lazy loading enabled.</figcaption>
+                </div>
             </figure>
-        </li>
-        <li>
-            <p>
-                Amazing lakes 
-            </p>
-            <img src="images/lake.jpeg" alt="image not available" width="474" height="266" title="lake" >
-            <figure>
-                <figcaption>
-                    lakes are soothing
-                </figcaption>
-                <p>
-                    <code>
-                        &lt;h1&gt;Hello World!&lt;/h1&gt;
-                    </code>
-                </p>
+
+            <figure class="gallery-card">
+                <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=600&q=80" alt="Cyberpunk neon city skyline at night" loading="lazy">
+                <div class="card-body">
+                    <h4>Metropolitan Nightscape</h4>
+                    <figcaption>Vibrant urban architecture captured with long exposure.</figcaption>
+                </div>
             </figure>
-        </li>
-    </ul>
-    
+
+            <figure class="gallery-card">
+                <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=600&q=80" alt="Crystal clear alpine lake with forest reflection" loading="lazy">
+                <div class="card-body">
+                    <h4>Glacial Lake Reflection</h4>
+                    <figcaption>Natural aquatic landscape showcasing color fidelity.</figcaption>
+                </div>
+            </figure>
+        </div>
+    </div>
 </body>
 </html>

@@ -1,50 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS3 3D Floating Object & Dynamic Shadow Physics</title>
     <style>
-        body{
-            background-color: white;
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #0f172a;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: system-ui, -apple-system, sans-serif;
+            overflow: hidden;
         }
-        .container{
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%,-50%);
+        .stage {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
-        img{
-            width: 200px;
-            height: 200px;
-            object-fit: cover;
-            animation: float 3s ease-out infinite;
+        .floating-box {
+            width: 140px;
+            height: 140px;
+            background: linear-gradient(135deg, #38bdf8, #6366f1);
+            border-radius: 28px;
+            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.5), inset 0 2px 2px rgba(255, 255, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            animation: floatPhysics 3.2s ease-in-out infinite;
         }
-        @keyframes float{
-            50%{
-                transform: translateY(60px);
+        @keyframes floatPhysics {
+            0%, 100% {
+                transform: translateY(-25px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(25px) rotate(4deg);
             }
         }
-        #shadow{
-            position: absolute;
-            width: 200px;
-            height: 20px;
-            top: 130%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.5);
+        .ground-shadow {
+            width: 130px;
+            height: 18px;
+            background: rgba(0, 0, 0, 0.6);
             border-radius: 50%;
-            filter: blur(3px);
-            animation: shrink 3s ease-out infinite;
+            filter: blur(6px);
+            margin-top: 35px;
+            animation: shadowScale 3.2s ease-in-out infinite;
         }
-        @keyframes shrink {
-            0%{ width: 30%;}
-            50%{ width: 60%;}
-            100%{ width: 30%;}
+        @keyframes shadowScale {
+            0%, 100% {
+                transform: scale(0.65);
+                opacity: 0.35;
+            }
+            50% {
+                transform: scale(1.15);
+                opacity: 0.8;
+            }
+        }
+        .back-nav {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+        }
+        .back-nav a {
+            color: #38bdf8;
+            text-decoration: none;
+            font-weight: bold;
+            background: rgba(30, 41, 59, 0.8);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <img src="./Image Assets/Forage-Logo.png" alt="img"/>
-        <span id="shadow"></span>
+    <div class="back-nav">
+        <a href="index.html">← Back to Showcase Hub</a>
+    </div>
+
+    <div class="stage">
+        <div class="floating-box">🚀</div>
+        <div class="ground-shadow"></div>
     </div>
 </body>
 </html>

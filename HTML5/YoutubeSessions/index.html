@@ -1,2 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML5 & CSS3 Masterclass Series Hub</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --border: #334155;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+        .container { max-width: 960px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 40px; }
+        h1 { color: var(--accent); font-size: 2.5rem; margin-bottom: 8px; }
+        .series-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .part-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .part-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.2);
+        }
+        .part-number {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent);
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+        .part-card h3 { font-size: 1.3rem; margin-bottom: 8px; color: #fff; }
+        .part-card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px; }
+        .part-link-text { color: var(--accent); font-weight: bold; font-size: 0.9rem; }
+        .hub-back-nav { margin-bottom: 25px; }
+        .hub-back-nav a { color: var(--accent); text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hub-back-nav">
+            <a href="../../index.html">← Back to Main Repository Showcase</a>
+        </div>
 
+        <header>
+            <h1>HTML5 & CSS3 Masterclass Series</h1>
+            <p style="color: var(--text-muted);">A progressive 6-part hands-on guide from fundamentals to advanced web development.</p>
+        </header>
 
+        <div class="series-grid">
+            <a href="part1.html" class="part-card">
+                <div>
+                    <span class="part-number">Part 01</span>
+                    <h3>Document Foundation & Tags</h3>
+                    <p>Learn standard document architecture, meta viewports, character encoding, and basic syntax.</p>
+                </div>
+                <span class="part-link-text">Launch Lesson 1 →</span>
+            </a>
+
+            <a href="part2.html" class="part-card">
+                <div>
+                    <span class="part-number">Part 02</span>
+                    <h3>Anchors & Navigation</h3>
+                    <p>Deep-dive into internal bookmark section jumps, external URLs, mailto, and telephone protocols.</p>
+                </div>
+                <span class="part-link-text">Launch Lesson 2 →</span>
+            </a>
+
+            <a href="part3.html" class="part-card">
+                <div>
+                    <span class="part-number">Part 03</span>
+                    <h3>Images & Media Figures</h3>
+                    <p>Explore responsive image loading, lazy attributes, semantic figure wrappers, and captions.</p>
+                </div>
+                <span class="part-link-text">Launch Lesson 3 →</span>
+            </a>
+
+            <a href="part4.html" class="part-card">
+                <div>
+                    <span class="part-number">Part 04</span>
+                    <h3>Semantic HTML5 Layouts</h3>
+                    <p>Wireframing with header, nav, main, article, section, aside, details/summary, and footer.</p>
+                </div>
+                <span class="part-link-text">Launch Lesson 4 →</span>
+            </a>
+
+            <a href="part5.html" class="part-card">
+                <div>
+                    <span class="part-number">Part 05</span>
+                    <h3>Accessible Data Tables</h3>
+                    <p>Construct structured matrix tables with header rows, captions, colspans, and accessible markup.</p>
+                </div>
+                <span class="part-link-text">Launch Lesson 5 →</span>
+            </a>
+
+            <a href="part6.html" class="part-card">
+                <div>
+                    <span class="part-number">Part 06</span>
+                    <h3>Advanced Forms & Validation</h3>
+                    <p>Build accessible form controls with regex validation patterns, date pickers, and fieldsets.</p>
+                </div>
+                <span class="part-link-text">Launch Lesson 6 →</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,125 +1,190 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Solar System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar System: CSS3 Keyframe Celestial Simulator</title>
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            margin: 0;
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: black;
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
             overflow: hidden;
+            font-family: system-ui, -apple-system, sans-serif;
+            color: #fff;
         }
 
-        .container {
-            font-size: 10px;
-            width: 40em;
-            height: 40em;
+        /* Celestial Center Container */
+        .universe {
             position: relative;
+            width: 700px;
+            height: 700px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
+        /* Sun */
         .sun {
             position: absolute;
-            top: 15em;
-            left: 15em;
-            width: 10em;
-            height: 10em;
-            background-color: yellow;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
-            box-shadow: 0 0 3em white;
+            background: radial-gradient(circle, #ffd000 0%, #ff4500 80%, #ff0000 100%);
+            box-shadow: 0 0 50px #ff6600, 0 0 100px rgba(255, 69, 0, 0.6);
+            z-index: 10;
         }
 
-        .earth, .moon, .mars {
+        /* Orbit Tracks */
+        .orbit {
             position: absolute;
-            border-style: solid;
-            border-color: white transparent transparent transparent;
-            border-width: 0.1em 0.1em 0 0;
             border-radius: 50%;
+            border: 1px dashed rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
+        /* Mercury */
+        .mercury-orbit {
+            width: 140px;
+            height: 140px;
+            animation: rotateOrbit 4s linear infinite;
+        }
+        .mercury {
+            position: absolute;
+            top: -6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #b5b5b5;
+            box-shadow: 0 0 6px #fff;
+        }
+
+        /* Venus */
+        .venus-orbit {
+            width: 220px;
+            height: 220px;
+            animation: rotateOrbit 7s linear infinite;
+        }
+        .venus {
+            position: absolute;
+            top: -9px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #e3bb76;
+            box-shadow: 0 0 8px #e3bb76;
+        }
+
+        /* Earth & Moon Orbit */
+        .earth-orbit {
+            width: 330px;
+            height: 330px;
+            animation: rotateOrbit 12s linear infinite;
+        }
         .earth {
-            top: 5em;
-            left: 5em;
-            width: 30em;
-            height: 30em;
-            animation: earth-orbit 36.5s linear infinite;
-        }
-
-        .moon {
-            top: 0;
-            right: 0;
-            width: 8em;
-            height: 8em;
-            animation: moon-orbit 2.7s linear infinite;
-        }
-
-        .mars {
-            top: 11.2em; /* Adjust the position to be on the orbit */
-            left: 11.2em; /* Adjust the position to be on the orbit */
-            width: 17em; /* Adjust radius of orbit */
-            height: 17em; /* Adjust radius of orbit */
-            animation: mars-orbit 10.5s linear infinite; /* Create a new animation for Mars */
-        }
-
-        .earth::before, .moon::before, .mars::before {
-            content: '';
             position: absolute;
+            top: -11px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #2f80ed, #004488);
+            box-shadow: 0 0 10px #2f80ed;
+        }
+        .moon-orbit {
+            position: absolute;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1px dotted rgba(255, 255, 255, 0.2);
+            top: -22px;
+            animation: rotateOrbit 2.5s linear infinite;
+        }
+        .moon {
+            position: absolute;
+            top: -3px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            box-shadow: 0 0 3px #fff;
         }
 
-        .earth::before {
-            top: 2.8em;
-            right: 2.8em;
-            width: 3em;
-            height: 3em;
-            background-color: aqua;
+        /* Mars */
+        .mars-orbit {
+            width: 440px;
+            height: 440px;
+            animation: rotateOrbit 20s linear infinite;
+        }
+        .mars {
+            position: absolute;
+            top: -8px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #ff5722, #8b1800);
+            box-shadow: 0 0 8px #ff5722;
         }
 
-        .moon::before {
-            top: 0.8em;
-            right: 0.2em;
-            width: 1.2em;
-            height: 1.2em;
-            background-color: silver;
-            box-shadow: 0 0 3em white;
+        /* Jupiter */
+        .jupiter-orbit {
+            width: 580px;
+            height: 580px;
+            animation: rotateOrbit 36s linear infinite;
+        }
+        .jupiter {
+            position: absolute;
+            top: -16px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #d4a373, #8a5a36);
+            box-shadow: 0 0 12px #d4a373;
         }
 
-        .mars::before {
-            top: 1em; /* Adjust the position to be inside the orbit of Mars */
-            right: 1.8em; /* Adjust the position to be inside the orbit of Mars */
-            width: 2em;
-            height: 2em;
-            background-color: red;
+        @keyframes rotateOrbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
-        @keyframes earth-orbit {
-            to {
-                transform: rotate(360deg);
-            }
+        /* Header info panel */
+        .info-panel {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(10px);
+            padding: 18px 24px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            z-index: 100;
         }
-
-        @keyframes moon-orbit {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        @keyframes mars-orbit {
-            to {
-                transform: rotate(360deg);
-            }
-        }
+        .info-panel h1 { font-size: 1.2rem; color: #38bdf8; margin-bottom: 4px; }
+        .info-panel p { font-size: 0.85rem; color: #94a3b8; }
+        .info-panel a { color: #38bdf8; text-decoration: none; font-size: 0.85rem; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="info-panel">
+        <h1>🪐 Solar System Orbit Simulator</h1>
+        <p>CSS3 Keyframe Rotational Mechanics & Multi-Body Gravity</p>
+        <p style="margin-top: 8px;"><a href="../../index.html">← Back to Showcase Hub</a></p>
+    </div>
+
+    <div class="universe">
         <div class="sun"></div>
-        <div class="earth">
-            <div class="moon"></div>
+        <div class="orbit mercury-orbit"><div class="mercury" title="Mercury"></div></div>
+        <div class="orbit venus-orbit"><div class="venus" title="Venus"></div></div>
+        <div class="orbit earth-orbit">
+            <div class="earth" title="Earth"></div>
+            <div class="moon-orbit"><div class="moon" title="Moon"></div></div>
         </div>
-        <div class="mars"></div>
+        <div class="orbit mars-orbit"><div class="mars" title="Mars"></div></div>
+        <div class="orbit jupiter-orbit"><div class="jupiter" title="Jupiter"></div></div>
     </div>
 </body>
-</html
+</html>
