@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coca-Cola | Real Magic Interactive Experience</title>
+    <meta name="description" content="Experience the iconic taste of Coca-Cola with dynamic 3D scroll animations, secret formula craft, flavor customizer, personalized Share-A-Coke studio, and sub-zero chill sensations.">
+    
+    <!-- Google Fonts & Remix Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Ambient Effervescence Particle Canvas -->
+    <canvas id="fizz-canvas"></canvas>
+    <div class="ambient-glow"></div>
+
+    <!-- Navigation Header -->
+    <header id="nav">
+        <div class="nav-left" id="menu-trigger">
+            <h1><i class="ri-menu-line"></i> Menu</h1>
+        </div>
+
+        <div class="nav-center">
+            <ul class="nav-links">
+                <li><a href="#hero" class="active">Drinks</a></li>
+                <li><a href="#flavors-section">Flavors</a></li>
+                <li><a href="#studio-section">Custom Can</a></li>
+                <li><a href="#franchise-section">Franchise</a></li>
+            </ul>
+            
+            <div class="nav-divider-line"></div>
+            
+            <div class="brand-logo-container">
+                <a href="#hero">
+                    <img src="https://cdn.iconscout.com/icon/free/png-256/free-coca-cola-logo-icon-download-in-svg-png-gif-file-formats--cold-drinks-beverages-brand-logos-pack-icons-1579762.png?f=webp&w=256" alt="Coca-Cola Logo">
+                </a>
+            </div>
+            
+            <div class="nav-divider-line"></div>
+            
+            <ul class="nav-links">
+                <li><a href="#chill-section">Chill Zone</a></li>
+                <li><a href="#impact-section">Impact</a></li>
+                <li><a href="#craft-section">Heritage</a></li>
+            </ul>
+        </div>
+
+        <div class="nav-right">
+            <button class="sound-toggle" id="sound-toggle-btn" title="Toggle Fizz Audio">
+                <i class="ri-volume-mute-line"></i> <span>Sound</span>
+            </button>
+            <button class="nav-action-btn" id="search-trigger" title="Search">
+                <i class="ri-search-line"></i>
+            </button>
+            <button class="nav-action-btn taste-now-btn" title="View Cart / Bag">
+                <i class="ri-shopping-bag-4-line"></i>
+                <span class="cart-badge" id="cart-count-badge">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Persistent Floating Scroll Bottle -->
+    <div id="coke-bottle-stage">
+        <img id="main-coke-bottle" src="./file.png" alt="Coca-Cola Iconic Contour Bottle">
+    </div>
+
+    <!-- MAIN SCROLL CONTAINER -->
+    <main>
+        
+        <!-- SECTION 1: HERO SECTION -->
+        <section id="hero">
+            <div class="hero-left">
+                <div class="hero-tag">
+                    <i class="ri-sparkling-fill"></i> Real Magic
+                </div>
+                <h1>Your favourite <span class="coke-word">coke</span> just got reinvented.</h1>
+                <p>Immerse yourself in the world's most beloved refreshment. Engineered with legendary crisp carbonation and our timeless secret recipe.</p>
+                <div class="hero-cta-group">
+                    <button class="primary-btn taste-now-btn">
+                        <i class="ri-shopping-bag-4-line"></i> Taste Now
+                    </button>
+                    <button class="heart-btn" title="Save to Favorites">
+                        <i class="ri-heart-line heart-toggle"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="hero-center">
+                <div id="center-bg"></div>
+            </div>
+
+            <div class="hero-right">
+                <div class="accordion-group">
+                    <!-- Item 1: Description -->
+                    <div class="accordion-item active">
+                        <div class="accordion-header">
+                            <h3>Description</h3>
+                            <span class="accordion-icon"><i class="ri-indeterminate-circle-line"></i></span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>Crafted to perfection with invigorating fizz and crisp botanical extracts. Every sip sparks uplifting energy, unmatched refreshness, and timeless celebration.</p>
+                        </div>
+                    </div>
+
+                    <!-- Item 2: Nutrients -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <h3>Nutrients</h3>
+                            <span class="accordion-icon"><i class="ri-add-circle-line"></i></span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>Per 330ml Can serving:</p>
+                            <div class="nutrient-bars">
+                                <div class="nutrient-row">
+                                    <span>Calories (140 kcal)</span>
+                                    <div class="n-bar-bg"><div class="n-bar-fill" style="width: 70%;"></div></div>
+                                </div>
+                                <div class="nutrient-row">
+                                    <span>Sugars (39g)</span>
+                                    <div class="n-bar-bg"><div class="n-bar-fill" style="width: 78%;"></div></div>
+                                </div>
+                                <div class="nutrient-row">
+                                    <span>Sodium (45mg)</span>
+                                    <div class="n-bar-bg"><div class="n-bar-fill" style="width: 20%;"></div></div>
+                                </div>
+                                <div class="nutrient-row">
+                                    <span>Caffeine (34mg)</span>
+                                    <div class="n-bar-bg"><div class="n-bar-fill" style="width: 35%;"></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 3: Ingredients -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <h3>Ingredients</h3>
+                            <span class="accordion-icon"><i class="ri-add-circle-line"></i></span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>Carbonated Pure Spring Water, Cane Sugar, Caramel Color (Class IV), Phosphoric Acid, Secret Natural Botanical Flavorings, Caffeine.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: CRAFT & SECRET FORMULA -->
+        <section id="craft-section" class="content-section">
+            <div class="craft-grid">
+                <div class="craft-empty-side">
+                    <!-- Reserved for Left-side Tilted Bottle on Scroll -->
+                </div>
+                <div class="craft-info-side">
+                    <span class="section-label"><i class="ri-shield-star-line"></i> The Secret Heritage</span>
+                    <h2 class="section-title">138 Years of Perfection in Every Drop.</h2>
+                    <div class="craft-cards">
+                        <div class="glass-feature-card tilt-card">
+                            <div class="card-icon"><i class="ri-history-line"></i></div>
+                            <div class="card-text">
+                                <h4>Iconic Contour Architecture</h4>
+                                <p>Patented in 1915 by the Root Glass Company to be recognized even in total darkness or broken in pieces on the ground.</p>
+                            </div>
+                        </div>
+                        <div class="glass-feature-card tilt-card">
+                            <div class="card-icon"><i class="ri-bubble-chart-line"></i></div>
+                            <div class="card-text">
+                                <h4>Micro-Carbonation Crisp</h4>
+                                <p>Infused at precise barometric pressure to sustain steady bubbling effervescence down to the very last drop.</p>
+                            </div>
+                        </div>
+                        <div class="glass-feature-card tilt-card">
+                            <div class="card-icon"><i class="ri-leaf-line"></i></div>
+                            <div class="card-text">
+                                <h4>Natural Botanical Essence</h4>
+                                <p>A proprietary synergy of citrus oils, nutmeg, vanilla, and spices locked inside the legendary Atlanta bank vault.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: FLAVORS SHOWCASE -->
+        <section id="flavors-section" class="content-section">
+            <div class="flavor-grid">
+                <div class="flavor-control-side">
+                    <span class="section-label"><i class="ri-palette-line"></i> The Spectrum</span>
+                    <h2 class="section-title">Explore The Legendary Lineup.</h2>
+                    
+                    <!-- Flavor Pills -->
+                    <div class="flavor-pills-container">
+                        <div class="flavor-pill active" data-flavor="original">
+                            <span class="flavor-dot"></span> Original
+                        </div>
+                        <div class="flavor-pill" data-flavor="zero">
+                            <span class="flavor-dot"></span> Zero Sugar
+                        </div>
+                        <div class="flavor-pill" data-flavor="cherry">
+                            <span class="flavor-dot"></span> Cherry Splash
+                        </div>
+                        <div class="flavor-pill" data-flavor="vanilla">
+                            <span class="flavor-dot"></span> Vanilla Dream
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Active Flavor Card -->
+                    <div class="flavor-details-card tilt-card" id="active-flavor-details">
+                        <span class="flavor-badge" id="flavor-badge">Iconic Classic</span>
+                        <h3 id="flavor-title">Original Taste</h3>
+                        <p id="flavor-subtitle">The timeless classic since 1886 with crisp effervescence and secret botanical notes.</p>
+                        
+                        <div class="flavor-metrics">
+                            <div class="metric-box">
+                                <span>Calories</span>
+                                <strong id="flavor-cals">140 kcal</strong>
+                            </div>
+                            <div class="metric-box">
+                                <span>Sugar</span>
+                                <strong id="flavor-sugars">39g</strong>
+                            </div>
+                            <div class="metric-box">
+                                <span>Caffeine</span>
+                                <strong id="flavor-caffeine">34mg</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="craft-empty-side">
+                    <!-- Reserved for Right-side Gliding Bottle on Scroll -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: SUB-ZERO CHILL EXPERIENCE -->
+        <section id="chill-section" class="content-section">
+            <div class="chill-grid">
+                <div class="craft-empty-side">
+                    <!-- Reserved for Left-side Frost Bottle on Scroll -->
+                </div>
+                <div class="chill-info-side">
+                    <span class="section-label"><i class="ri-temp-cold-line"></i> Temperature Science</span>
+                    <h2 class="section-title">The Sub-Zero Chill Zone.</h2>
+                    
+                    <div class="chill-card-box tilt-card">
+                        <div class="chill-header">
+                            <div>
+                                <h4>Serving Temperature</h4>
+                                <p style="color: var(--text-muted); font-size: 13px;">Drag slider to preview flavor profile</p>
+                            </div>
+                            <div class="chill-temp-display" id="temp-value-display">4°C</div>
+                        </div>
+
+                        <div class="slider-container">
+                            <input type="range" min="1" max="12" value="4" class="temp-slider" id="temp-slider">
+                        </div>
+
+                        <div class="chill-meter-wrap">
+                            <div id="chill-meter-fill"></div>
+                        </div>
+
+                        <p id="temp-status-text">✨ The Gold Standard (Optimal Secret Formula Balance)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: SHARE-A-COKE STUDIO -->
+        <section id="studio-section" class="content-section">
+            <div class="studio-grid">
+                <div class="studio-card tilt-card">
+                    <span class="section-label"><i class="ri-user-smile-line"></i> Custom Studio</span>
+                    <h2 class="section-title" style="font-size: 36px; margin-bottom: 15px;">Share a Coke With...</h2>
+                    <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">
+                        Type any name or phrase to generate your personalized iconic Coke contour edition.
+                    </p>
+
+                    <div class="newsletter-form" style="margin-bottom: 20px;">
+                        <input type="text" id="custom-label-input" placeholder="Enter your name (e.g. ALEX)" maxlength="16">
+                    </div>
+
+                    <div class="custom-can-preview">
+                        <div class="share-tagline">Share a Coke with</div>
+                        <div class="live-custom-name" id="live-custom-name">YOUR NAME</div>
+                        <div style="font-size: 11px; opacity: 0.8; letter-spacing: 1px;">LIMITED SPECIAL EDITION</div>
+                    </div>
+
+                    <button class="primary-btn" id="generate-label-btn" style="width: 100%; justify-content: center;">
+                        <i class="ri-magic-line"></i> Save Custom Can
+                    </button>
+                </div>
+                <div class="craft-empty-side">
+                    <!-- Reserved for Stage Bottle on Right -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: FRANCHISE CALCULATOR -->
+        <section id="franchise-section" class="content-section">
+            <div class="franchise-grid">
+                <div class="craft-empty-side">
+                    <!-- Stage Bottle on Left -->
+                </div>
+                <div class="franchise-calc-box tilt-card">
+                    <span class="section-label"><i class="ri-store-2-line"></i> Franchise Partnership</span>
+                    <h2 class="section-title" style="font-size: 36px; margin-bottom: 15px;">Retailer ROI Estimator</h2>
+                    <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 25px;">
+                        Estimate monthly gross revenue when partnering as an authorized Coca-Cola distributor or retail partner.
+                    </p>
+
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span>Monthly Distribution Volume</span>
+                        <strong id="calc-volume-display" style="color: var(--coke-neon);">1,500 cases/mo</strong>
+                    </div>
+                    <input type="range" min="200" max="10000" step="100" value="1500" class="temp-slider" id="calc-volume-slider">
+
+                    <div class="calc-result-display">
+                        <div>
+                            <span style="font-size: 12px; color: var(--text-muted); display: block;">Estimated Monthly Revenue</span>
+                            <span style="font-size: 13px; font-weight: 600;">Based on standard gross margin</span>
+                        </div>
+                        <h3 id="calc-revenue-display">$21,750</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 7: GLOBAL IMPACT & COUNTERS -->
+        <section id="impact-section" class="content-section">
+            <div class="impact-header">
+                <span class="section-label"><i class="ri-earth-line"></i> Global Reach</span>
+                <h2 class="section-title">Refreshing The World, Making A Difference.</h2>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card tilt-card">
+                    <div class="stat-number" data-target="200" data-suffix="+">0+</div>
+                    <p>Countries & Territories</p>
+                </div>
+                <div class="stat-card tilt-card">
+                    <div class="stat-number" data-target="100" data-suffix="%">0%</div>
+                    <p>Recyclable Packaging Goal</p>
+                </div>
+                <div class="stat-card tilt-card">
+                    <div class="stat-number" data-target="1886" data-suffix="">0</div>
+                    <p>Year of Inception</p>
+                </div>
+                <div class="stat-card tilt-card">
+                    <div class="stat-number" data-target="19" data-suffix="B+">0B+</div>
+                    <p>Daily Shared Moments</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 8: CALL TO ACTION -->
+        <section id="cta-section">
+            <div class="cta-banner">
+                <span class="section-label"><i class="ri-sparkling-line"></i> Instant Refreshment</span>
+                <h2>Taste The Real Magic.</h2>
+                <p>Order your ice-cold pack delivered directly to your doorstep with guaranteed sub-zero temperature preservation.</p>
+                <button class="primary-btn taste-now-btn">
+                    <i class="ri-shopping-bag-4-line"></i> Order Cold Pack Now
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- SLIDE-OVER MOBILE DRAWER -->
+    <div id="drawer-overlay"></div>
+    <div id="mobile-drawer">
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <img src="https://cdn.iconscout.com/icon/free/png-256/free-coca-cola-logo-icon-download-in-svg-png-gif-file-formats--cold-drinks-beverages-brand-logos-pack-icons-1579762.png?f=webp&w=256" alt="Coke" style="height: 32px;">
+                <button id="close-drawer" class="modal-close-btn"><i class="ri-close-line"></i></button>
+            </div>
+            <ul class="drawer-links">
+                <li><a href="#hero">Drinks</a></li>
+                <li><a href="#flavors-section">Flavors & Lineup</a></li>
+                <li><a href="#studio-section">Share-A-Coke Studio</a></li>
+                <li><a href="#craft-section">Our Story & Heritage</a></li>
+                <li><a href="#chill-section">Serving Guide</a></li>
+                <li><a href="#franchise-section">Franchise Calculator</a></li>
+                <li><a href="#impact-section">Sustainability</a></li>
+                <li><a href="#cta-section">Order Cold Pack</a></li>
+            </ul>
+        </div>
+        <div>
+            <p style="font-size: 13px; color: var(--text-muted);">© 2026 The Coca-Cola Company</p>
+        </div>
+    </div>
+
+    <!-- SEARCH MODAL -->
+    <div class="coke-modal" id="search-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="close-search"><i class="ri-close-line"></i></button>
+            <h3 style="font-family: var(--font-heading); margin-bottom: 15px;">Search Coca-Cola</h3>
+            <div class="newsletter-form">
+                <input type="text" id="search-query-input" placeholder="Search flavors, stories, merch...">
+            </div>
+            <div style="margin-top: 20px; display: flex; gap: 8px; flex-wrap: wrap;">
+                <span class="flavor-badge" style="cursor: pointer;">Original</span>
+                <span class="flavor-badge" style="cursor: pointer;">Zero Sugar</span>
+                <span class="flavor-badge" style="cursor: pointer;">History</span>
+                <span class="flavor-badge" style="cursor: pointer;">Franchise</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ORDER / TASTE NOW MODAL -->
+    <div class="coke-modal" id="order-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="close-order"><i class="ri-close-line"></i></button>
+            <h3 style="font-family: var(--font-heading); font-size: 24px; margin-bottom: 8px;">Order Ice-Cold Pack</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Select your preferred contour packaging format:</p>
+
+            <div class="size-selector">
+                <div class="size-option selected">
+                    <h5>250ml</h5>
+                    <span>Glass Contour</span>
+                </div>
+                <div class="size-option">
+                    <h5>330ml</h5>
+                    <span>Sleek Can</span>
+                </div>
+                <div class="size-option">
+                    <h5>500ml</h5>
+                    <span>PET Bottle</span>
+                </div>
+            </div>
+
+            <div style="margin: 20px 0;">
+                <label style="font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 6px;">Delivery Zip Code</label>
+                <div class="newsletter-form">
+                    <input type="text" value="90210" style="padding: 10px 16px;">
+                </div>
+            </div>
+
+            <button class="primary-btn" id="confirm-order-btn" style="width: 100%; justify-content: center;">
+                <i class="ri-check-line"></i> Confirm & Add to Bag
+            </button>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-top">
+            <div class="footer-col">
+                <img src="https://cdn.iconscout.com/icon/free/png-256/free-coca-cola-logo-icon-download-in-svg-png-gif-file-formats--cold-drinks-beverages-brand-logos-pack-icons-1579762.png?f=webp&w=256" alt="Coke" style="height: 36px; margin-bottom: 16px;">
+                <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6; max-width: 320px;">
+                    Refreshing the world and making a difference since 1886. Taste the feeling of original timeless magic.
+                </p>
+            </div>
+            <div class="footer-col">
+                <h4>Products</h4>
+                <ul>
+                    <li><a href="#hero">Coca-Cola Original</a></li>
+                    <li><a href="#flavors-section">Coca-Cola Zero Sugar</a></li>
+                    <li><a href="#flavors-section">Cherry & Vanilla</a></li>
+                    <li><a href="#cta-section">Special Editions</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#craft-section">Our Heritage</a></li>
+                    <li><a href="#impact-section">Sustainability</a></li>
+                    <li><a href="#franchise-section">Franchise Inquiry</a></li>
+                    <li><a href="#chill-section">Serving Guide</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Stay Refreshed</h4>
+                <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 10px;">Get exclusive drop invites & secret recipe lore.</p>
+                <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed to Real Magic drops!');">
+                    <input type="email" placeholder="Your email address" required>
+                    <button type="submit" class="primary-btn" style="padding: 10px 18px;"><i class="ri-arrow-right-line"></i></button>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 The Coca-Cola Company. All Rights Reserved. Conceptual Design Showcase.</p>
+            <div class="footer-socials">
+                <a href="https://instagram.com" target="_blank" rel="noopener"><i class="ri-instagram-line"></i></a>
+                <a href="https://twitter.com" target="_blank" rel="noopener"><i class="ri-twitter-x-line"></i></a>
+                <a href="https://youtube.com" target="_blank" rel="noopener"><i class="ri-youtube-line"></i></a>
+                <a href="https://facebook.com" target="_blank" rel="noopener"><i class="ri-facebook-circle-line"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Engine -->
+    <script src="script.js"></script>
+</body>
+</html>

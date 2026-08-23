@@ -1,0 +1,65 @@
+li {
+    color:rgb(135, 10, 1);
+}
+#li1:hover {
+    font-family:verdana;
+    font: size 80%;
+    color:aqua;
+    background-color:rgb(5, 3, 28) ;
+}
+
+#li2:hover {
+    font-family:monospace;
+    font: size 80%;
+    color:aqua;
+    background-color:rgb(5, 3, 28) ;
+}
+
+#li3:hover {
+    font-family:Courier New;
+    font: size 80%;
+    color:aqua;
+    background-color:rgb(5, 3, 28) ;
+}
+#li4:hover {
+    font-family:Arial Narrow;
+    font: size 80%;
+    color:aqua;
+    background-color:rgb(5, 3, 28) ;
+}
+#li5:hover {
+    font-family:Times New Roman;
+    font: size 80%;
+    color:aqua;
+    background-color:rgb(5, 3, 28) ;
+}
+#li6:hover {
+    font-family:Georgia;
+    font: size 80%;
+    color:aqua;
+    background-color:rgb(5, 3, 28) ;
+}
+#li7:hover {
+    font-family:serif;
+    font: size 80%;
+    color:aqua;
+    background-color:rgb(5, 3, 28) ;
+}
+#li8:hover {
+    font-family:'Impact';
+    font: size 80%;
+    color:aqua;
+    background-color:rgb(5, 3, 28) ;
+}
+#li9:hover {
+    font-family:'Comic Sans MS';
+    font: size 80%;
+    color:aqua;
+    background-color:rgb(5, 3, 28) ;
+}
+#li10:hover {
+    font-family:'Brush Script MT';
+    font: size 80%;
+    color:aqua;
+    background-color:rgb(5, 3, 28) ;
+}

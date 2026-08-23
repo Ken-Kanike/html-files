@@ -1,0 +1,45 @@
+HTML   Hyper Text Markup Language 
+-------------------by Tim Bernse Lee
+
+Baisc Structure
+<HTML>
+ <HEAD>
+  <TITLE>
+  </TITLE>
+ </HEAD>
+ <BODY>
+ </BODY>
+</HEAD>
+
+
+Basic HTML5 codes
+<!DOCTYPE  html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title> Title of page </title>
+</head>
+<body>
+body pf page
+</body>
+</html>
+
+types of tags 
+1)container tag
+2)void tags/empty tag
+
+
+container tags
+--- has start and end
+eg html,head,etc
+
+
+empty tag
+------has only start 
+eg  br,hr,img,etc
+
+
+
+
+Alt+z+windows  ==> wrap text
+sift + alt + down  arrow 

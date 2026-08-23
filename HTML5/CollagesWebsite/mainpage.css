@@ -1,0 +1,40 @@
+
+* {
+    box-sizing: border-box;
+  }
+body {
+    background-color: darkgray;
+}
+h1 {
+    text-align:center;
+    color: rgb(9, 33, 119);
+}
+h1:hover {
+    color:rgb(7, 245, 182);
+}
+ h3 {
+    text-align:center;
+    color: rgb(9, 33, 119);
+ }
+
+ a :visited{
+      color:rgb(77, 2, 69);
+ }
+ a:hover {
+    color:rgb(7, 245, 182);
+ }
+
+footer {
+    background-color: #777;
+    padding: 10px;
+    text-align: center;
+    color: white;
+  }
+header {
+    background-color: #c2c1c1;
+    padding: 25px;
+    text-align: center;
+    float: center;
+    font-size: 20px;
+  }
+  

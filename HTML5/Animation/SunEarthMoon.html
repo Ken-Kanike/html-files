@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Solar System</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: black;
+            overflow: hidden;
+        }
+
+        .container {
+            font-size: 10px;
+            width: 40em;
+            height: 40em;
+            position: relative;
+        }
+
+        .sun {
+            position: absolute;
+            top: 15em;
+            left: 15em;
+            width: 10em;
+            height: 10em;
+            background-color: yellow;
+            border-radius: 50%;
+            box-shadow: 0 0 3em white;
+        }
+
+        .earth, .moon, .mars {
+            position: absolute;
+            border-style: solid;
+            border-color: white transparent transparent transparent;
+            border-width: 0.1em 0.1em 0 0;
+            border-radius: 50%;
+        }
+
+        .earth {
+            top: 5em;
+            left: 5em;
+            width: 30em;
+            height: 30em;
+            animation: earth-orbit 36.5s linear infinite;
+        }
+
+        .moon {
+            top: 0;
+            right: 0;
+            width: 8em;
+            height: 8em;
+            animation: moon-orbit 2.7s linear infinite;
+        }
+
+        .mars {
+            top: 11.2em; /* Adjust the position to be on the orbit */
+            left: 11.2em; /* Adjust the position to be on the orbit */
+            width: 17em; /* Adjust radius of orbit */
+            height: 17em; /* Adjust radius of orbit */
+            animation: mars-orbit 10.5s linear infinite; /* Create a new animation for Mars */
+        }
+
+        .earth::before, .moon::before, .mars::before {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+        }
+
+        .earth::before {
+            top: 2.8em;
+            right: 2.8em;
+            width: 3em;
+            height: 3em;
+            background-color: aqua;
+        }
+
+        .moon::before {
+            top: 0.8em;
+            right: 0.2em;
+            width: 1.2em;
+            height: 1.2em;
+            background-color: silver;
+            box-shadow: 0 0 3em white;
+        }
+
+        .mars::before {
+            top: 1em; /* Adjust the position to be inside the orbit of Mars */
+            right: 1.8em; /* Adjust the position to be inside the orbit of Mars */
+            width: 2em;
+            height: 2em;
+            background-color: red;
+        }
+
+        @keyframes earth-orbit {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes moon-orbit {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes mars-orbit {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sun"></div>
+        <div class="earth">
+            <div class="moon"></div>
+        </div>
+        <div class="mars"></div>
+    </div>
+</body>
+</html

@@ -1,0 +1,12 @@
+<HTML>
+ <HEAD>
+  <TITLE> Table tag
+  </TITLE>
+ </HEAD>
+ <h2 align="center"> Table tags </h2>
+ <div> table tag </div>
+ <table>
+</table>
+  <BODY>
+ </BODY>
+</HEAD>
